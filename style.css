@@ -10,7 +10,7 @@
     --primary-color: #C5A049;
     --secondary-color: #040f1a;
     --text-dark:#C5A049;
-    --text-light: #666;
+    --text-light: #fff;
     --white: #ffffff;
     --bg-light: #040f1a;
 }
@@ -404,13 +404,13 @@ background: linear-gradient(135deg, #B8860B, #FFD700);
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #040f1a;
+    color: #fff;
     font-weight: 500;
 }
 
 .info-item i {
     font-size: 1.5rem;
-    color: #040f1a;
+    color: #fff;
 }
 
 .iframe-title{
