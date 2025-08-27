@@ -1,9 +1,5 @@
-
-
-
-// ===== AVISO =====
-// Este arquivo usa ES Modules. No HTML, carregue com:
-// <script type="module" src="./script.js"></script>
+// ===== ESTE ARQUIVO USA ES MODULES =====
+// No HTML: <script type="module" src="./script.js"></script>
 
 // ===== MENU MOBILE TOGGLE =====
 const menuToggle = document.querySelector('.menu-toggle');
@@ -11,37 +7,25 @@ const navLinks = document.querySelector('.nav-links');
 
 menuToggle?.addEventListener('click', () => {
     navLinks.classList.toggle('active');
-
     const icon = menuToggle.querySelector('i');
-    if (navLinks.classList.contains('active')) {
-        icon.classList.remove('bx-menu');
-        icon.classList.add('bx-x');
-    } else {
-        icon.classList.remove('bx-x');
-        icon.classList.add('bx-menu');
-    }
+    if (navLinks.classList.contains('active')) { icon.classList.remove('bx-menu'); icon.classList.add('bx-x'); }
+    else { icon.classList.remove('bx-x'); icon.classList.add('bx-menu'); }
 });
 
 // ===== SMOOTH SCROLLING =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-
         navLinks?.classList.remove('active');
         const icon = menuToggle?.querySelector('i');
-        if (icon) {
-            icon.classList.remove('bx-x');
-            icon.classList.add('bx-menu');
-        }
+        if (icon) { icon.classList.remove('bx-x'); icon.classList.add('bx-menu'); }
 
         const targetId = this.getAttribute('href');
         const targetSection = document.querySelector(targetId);
-
         if (targetSection) {
             const headerOffset = 80;
             const elementPosition = targetSection.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
             window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         }
     });
@@ -71,11 +55,7 @@ const header = document.querySelector('header');
 window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
     header.style.boxShadow = currentScroll > 50 ? '0 2px 20px rgba(0,0,0,0.1)' : '0 2px 10px rgba(0,0,0,0.1)';
-    if (currentScroll > lastScroll && currentScroll > 100) {
-        header.style.transform = 'translateY(-100%)';
-    } else {
-        header.style.transform = 'translateY(0)';
-    }
+    header.style.transform = (currentScroll > lastScroll && currentScroll > 100) ? 'translateY(-100%)' : 'translateY(0)';
     lastScroll = currentScroll;
 });
 
@@ -95,12 +75,9 @@ style.innerHTML = `
     50% { transform: scale(1.1); box-shadow: 0 8px 30px rgba(37,211,102,0.4); }
     100% { transform: scale(1); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
   }
-  /* pinta horários reservados no select */
   option[disabled].reservado { background:#eee; color:#888; }
 `;
 document.head.appendChild(style);
-
-
 
 // ===== MODAL / AGENDAMENTO =====
 const modal = document.getElementById("modal");
@@ -109,17 +86,12 @@ const confirmarBtn = document.getElementById("confirmarBtn");
 const dataInput = document.getElementById("data");
 const horaSelect = document.getElementById("hora");
 
-// NOVO: vários botões abrem o mesmo modal, com contexto
+// Vários botões abrem o mesmo modal, com contexto
 const openBtns = document.querySelectorAll(".openModalBtn");
 
-// Contexto atual do agendamento (setado ao clicar no botão)
-let ctx = {
-    profissional: null,   // ex: "Maria José"
-    wa: null,             // ex: "5581999990001"
-    colecao: null         // ex: "reservas_maria"
-};
+// Contexto atual do agendamento
+let ctx = { profissional: null, wa: null, colecao: null };
 
-// Abre modal com contexto
 openBtns.forEach(btn => {
     btn.addEventListener("click", () => {
         ctx.profissional = btn.dataset.pro || "Profissional";
@@ -141,7 +113,7 @@ openBtns.forEach(btn => {
         if (horaSelect) horaSelect.value = "";
         resetSelectVisual();
 
-        // Dica rápida no título (opcional): mostrar com quem vai agendar
+        // Título do modal
         const h2 = modal.querySelector("h2");
         if (h2) h2.textContent = `Escolha seu horário com ${ctx.profissional}`;
     });
@@ -153,33 +125,37 @@ window.addEventListener("click", (e) => { if (e.target === modal) modal.style.di
 // ===== FIREBASE (CDN modular) =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-    getFirestore, doc, getDoc, setDoc, serverTimestamp,
+    // use initializeFirestore para configurar transporte
+    initializeFirestore,
+    doc, getDoc, setDoc, serverTimestamp,
     collection, query, where, getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// config DO SEU PROJETO studio-donna-f7579
+// Cole aqui o CONFIG do seu projeto (App Web registrado no Console)
 const firebaseConfig = {
-    apiKey: "AIzaSyC8vB6emYJp9OVumvz7YrfMU0xLg1Pv-Go",
-    authDomain: "studio-donna-f7579.firebaseapp.com",
-    projectId: "studio-donna-f7579",
-    storageBucket: "studio-donna-f7579.firebasestorage.app",
-    messagingSenderId: "542780214223",
-    appId: "1:542780214223:web:e330e29fcbb2b670f8e0ba",
-    measurementId: "G-TBZPL44ZGR"
+    apiKey: "AIzaSyD8q8N8l6lG-4YGNDZ6Lfs63yW6IS2lqFc",
+    authDomain: "ra-barbearia-a8e60.firebaseapp.com",
+    projectId: "ra-barbearia-a8e60",
+    storageBucket: "ra-barbearia-a8e60.firebasestorage.app",
+    messagingSenderId: "6836920871",
+    appId: "1:6836920871:web:2b52193c00af7136436402",
+    measurementId: "G-RBBGBQ82W4"
 };
+
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);           // ← isto PRECISA existir
 
-// (opcional: log de debug do caminho salvo)
-function logDestino(data, hora) {
-    console.log("[DESTINO] coleção:", ctx.colecao, " docId:", `${data}_${hora}`);
-}
+// 🔧 Corrige Listen 400 em redes que bloqueiam streaming
+const db = initializeFirestore(app, {
+    experimentalAutoDetectLongPolling: true,
+    // Se ainda assim a sua rede bloquear, troque para a linha abaixo:
+    // experimentalForceLongPolling: true,
+    // useFetchStreams: false
+});
 
-// ===== HELPERS FIRESTORE (AGORA POR COLEÇÃO) =====
+// ===== HELPERS FIRESTORE =====
 const toKey = (ymd, hhmm) => `${ymd}_${hhmm}`;
 const normalizeHora = (h) => h.padStart(5, "0");
 
-// Busca horários ocupados para UMA coleção (um profissional) em uma data
 async function getReservasByDate(colecao, ymd) {
     const q = query(collection(db, colecao), where("data", "==", ymd));
     const snap = await getDocs(q);
@@ -224,13 +200,14 @@ async function carregarIndisponiveis() {
         marcarIndisponiveis(horas);
     } catch (e) {
         console.error("Erro ao carregar horários:", e);
+        alert("Não foi possível consultar os horários. Verifique as regras do Firestore e a conexão.");
     }
 }
 
 // Atualiza horários quando trocar a data
 dataInput?.addEventListener("change", carregarIndisponiveis);
 
-// ===== CONFIRMAR RESERVA (por profissional/coleção) =====
+// ===== CONFIRMAR RESERVA =====
 confirmarBtn?.addEventListener("click", async () => {
     const data = dataInput?.value;
     const hora = horaSelect?.value;
@@ -250,9 +227,9 @@ confirmarBtn?.addEventListener("click", async () => {
 
     try {
         const hhmm = normalizeHora(hora);
-        const ref = doc(db, ctx.colecao, toKey(data, hhmm)); // movido p/ dentro do try
+        const ref = doc(db, ctx.colecao, toKey(data, hhmm));
 
-        const snap = await getDoc(ref);
+        const snap = await getDoc(ref);  // agora funciona com fallback de transporte
         if (snap.exists()) {
             await carregarIndisponiveis();
             alert("Este horário já foi reservado. Escolha outro, por favor.");
@@ -275,7 +252,7 @@ confirmarBtn?.addEventListener("click", async () => {
 
     } catch (err) {
         console.error("[RESERVA] ", err?.code, err?.message, err);
-        alert("Não foi possível concluir a reserva. Tente novamente.");
+        alert("Não foi possível concluir a reserva. Verifique as regras do Firestore e tente novamente.");
     } finally {
         confirmarBtn.disabled = false;
         confirmarBtn.textContent = originalText || "Agendar via WhatsApp";
